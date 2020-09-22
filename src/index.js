@@ -49,6 +49,7 @@ function drawPointsLogic(ctx, coordinatesArray, r) {
   //let m = 1 / 4;
   //console.log(r)
   let angleArray = [];
+  let points = [];
   for (var i = 0; i < 8; i++) {
     angleArray.push(((i + 1) * 2 * Math.PI) / 16);
   }
@@ -57,33 +58,38 @@ function drawPointsLogic(ctx, coordinatesArray, r) {
   let y1 = coordinatesArray[0][0].y;
   let x2 = coordinatesArray[0][1].x;
   let y2 = coordinatesArray[0][1].y;
-  //console.log(x1, y1, x2, y2)
-  let point = null;
-  // if(x1 - (r*Math.cos(angleArray[0])) <= x2 ){
-  //    point = {
-  //     x: x2 + r * Math.cos(angleArray[0]),
-  //     y: y2 - r * Math.sin(angleArray[0])
-  //   };
-  // }
-  // else  {
-  point = {
-    x: x1 - r * Math.cos(angleArray[0]),
-    y: y1 + r * Math.sin(angleArray[0])
-  };
-  // }
-
-  ctx.fillStyle = "black";
+  for (var i = 0; i < 8; i++) {
+    points.push({
+      x: coordinatesArray[i][0].x - r * Math.cos(angleArray[i]),
+      y: coordinatesArray[i][0].y + r * Math.sin(angleArray[i])
+    });
+  }
+  for (var j = 0; j < 8; j++) {
+    ctx.fillStyle = "black";
   ctx.beginPath();
-  ctx.arc(point.x, point.y, 10, 0, 2 * Math.PI);
+  ctx.arc(points[j].x, points[j].y, 10, 0, 2 * Math.PI);
   ctx.stroke();
   ctx.fill();
+  }
+  //console.log(x1, y1, x2, y2)
+  // let point = {
+  //   x: x1 - r * Math.cos(angleArray[0]),
+  //   y: y1 + r * Math.sin(angleArray[0])
+  // };
+  // }
+
+  // ctx.fillStyle = "black";
+  // ctx.beginPath();
+  // ctx.arc(point.x, point.y, 10, 0, 2 * Math.PI);
+  // ctx.stroke();
+  // ctx.fill();
 }
 
 function drawPoints(coordinatesArray, bigCentre, bigRadius) {
   var canvas = document.getElementById("viewer");
   var ctx = canvas.getContext("2d");
   console.log();
-  let r = 2;
+  let r = 0;
   let sign = "+";
 
   setInterval(() => {
