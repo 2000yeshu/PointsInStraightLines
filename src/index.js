@@ -60,16 +60,16 @@ function drawPointsLogic(ctx, coordinatesArray, r) {
   let y2 = coordinatesArray[0][1].y;
   for (var i = 0; i < 8; i++) {
     points.push({
-      x: coordinatesArray[i][0].x - r * Math.cos(angleArray[i]),
-      y: coordinatesArray[i][0].y + r * Math.sin(angleArray[i])
+      x: coordinatesArray[i][0].x - r[i] * Math.cos(angleArray[i]),
+      y: coordinatesArray[i][0].y + r[i] * Math.sin(angleArray[i])
     });
   }
   for (var j = 0; j < 8; j++) {
     ctx.fillStyle = "black";
-  ctx.beginPath();
-  ctx.arc(points[j].x, points[j].y, 10, 0, 2 * Math.PI);
-  ctx.stroke();
-  ctx.fill();
+    ctx.beginPath();
+    ctx.arc(points[j].x, points[j].y, 10, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.fill();
   }
   //console.log(x1, y1, x2, y2)
   // let point = {
@@ -89,29 +89,53 @@ function drawPoints(coordinatesArray, bigCentre, bigRadius) {
   var canvas = document.getElementById("viewer");
   var ctx = canvas.getContext("2d");
   console.log();
+  let dist = [12, 0, 12, 45, 90, 150, 210, 255];
+
   let r = 0;
-  let sign = "+";
+  let sign = ["-", "+", "-", "+", "+", "+", "+", "+"];
 
   setInterval(() => {
-    if (r >= 300 && sign === "+") {
-      sign = "-";
-    } else if (r < 300 && r > 0 && sign === "-") {
-      sign = "-";
-    } else {
-      sign = "+";
+    for (var k = 0; k < 8; k++) {
+      r = dist[k];
+      if (dist[k] >= 300 && sign[k] === "+") {
+        sign[k] = "-";
+      } else if (r < 300 && r > 0 && sign[k] === "-") {
+        sign[k] = "-";
+      } else {
+        sign[k] = "+";
+      }
+
+      if (sign[k] === "+") {
+        // r = r + 2;
+
+        dist[k] = dist[k] + 2;
+      } else if (sign[k] === "-") {
+        //r = r - 2;
+
+        dist[k] = dist[k] - 2;
+      }
     }
 
-    if (sign === "+") {
-      r = r + 2;
-    } else if (sign === "-") {
-      r = r - 2;
-    }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawPointsLogic(ctx, coordinatesArray, r);
+    drawPointsLogic(ctx, coordinatesArray, dist);
     drawBigCircle(bigCentre, bigRadius);
     drawLines(bigCentre, bigRadius);
-  }, 50);
-  //drawPointsLogic(ctx, coordinatesArray, r );
+  }, 100);
+
+  // ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // drawPointsLogic(ctx, coordinatesArray, dist);
+  // drawBigCircle(bigCentre, bigRadius);
+  // console.log(bigCentre, bigRadius);
+  // drawLines(bigCentre, bigRadius);
+  // ctx.beginPath();
+  // ctx.arc(
+  //   300 + 75 * Math.cos(Math.PI / 4),
+  //   160 - 75 * Math.sin(Math.PI / 4),
+  //   75,
+  //   0,
+  //   2 * Math.PI
+  // );
+  // ctx.stroke();
 }
 
 function renderSmallCircle(theta, bigCentre, bigRadius) {
