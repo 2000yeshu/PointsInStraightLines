@@ -45,16 +45,33 @@ function drawLines(centre, radius) {
   return coordinatesArray;
 }
 
-function drawPointsLogic(ctx, coordinatesArray) {
-  let m = 1 / 4;
+function drawPointsLogic(ctx, coordinatesArray, r) {
+  //let m = 1 / 4;
+  //console.log(r)
+  let angleArray = [];
+  for (var i = 0; i < 8; i++) {
+    angleArray.push(((i + 1) * 2 * Math.PI) / 16);
+  }
+
   let x1 = coordinatesArray[0][0].x;
   let y1 = coordinatesArray[0][0].y;
   let x2 = coordinatesArray[0][1].x;
   let y2 = coordinatesArray[0][1].y;
-  let point = {
-    x: (m * x1 + x2) / (m + 1),
-    y: (m * y1 + y2) / (m + 1)
+  //console.log(x1, y1, x2, y2)
+  let point = null;
+  // if(x1 - (r*Math.cos(angleArray[0])) <= x2 ){
+  //    point = {
+  //     x: x2 + r * Math.cos(angleArray[0]),
+  //     y: y2 - r * Math.sin(angleArray[0])
+  //   };
+  // }
+  // else  {
+  point = {
+    x: x1 - r * Math.cos(angleArray[0]),
+    y: y1 + r * Math.sin(angleArray[0])
   };
+  // }
+
   ctx.fillStyle = "black";
   ctx.beginPath();
   ctx.arc(point.x, point.y, 10, 0, 2 * Math.PI);
@@ -62,13 +79,33 @@ function drawPointsLogic(ctx, coordinatesArray) {
   ctx.fill();
 }
 
-function drawPoints(coordinatesArray) {
+function drawPoints(coordinatesArray, bigCentre, bigRadius) {
   var canvas = document.getElementById("viewer");
   var ctx = canvas.getContext("2d");
+  console.log();
+  let r = 2;
+  let sign = "+";
 
-  setInterval(() => {}, 1000);
+  setInterval(() => {
+    if (r >= 300 && sign === "+") {
+      sign = "-";
+    } else if (r < 300 && r > 0 && sign === "-") {
+      sign = "-";
+    } else {
+      sign = "+";
+    }
 
-  drawPointsLogic(ctx, coordinatesArray);
+    if (sign === "+") {
+      r = r + 2;
+    } else if (sign === "-") {
+      r = r - 2;
+    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawPointsLogic(ctx, coordinatesArray, r);
+    drawBigCircle(bigCentre, bigRadius);
+    drawLines(bigCentre, bigRadius);
+  }, 50);
+  //drawPointsLogic(ctx, coordinatesArray, r );
 }
 
 function renderSmallCircle(theta, bigCentre, bigRadius) {
@@ -89,7 +126,7 @@ function renderSmallCircle(theta, bigCentre, bigRadius) {
   //console.log(centre);
   let coordinatesArray = drawLines(bigCentre, bigRadius);
   drawBigCircle(bigCentre, bigRadius);
-  drawPoints(coordinatesArray);
+  drawPoints(coordinatesArray, bigCentre, bigRadius);
   ctx.beginPath();
   ctx.arc(centre.x, centre.y, radius, 0, 2 * Math.PI);
   //ctx.stroke();
