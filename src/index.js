@@ -89,10 +89,10 @@ function drawPoints(coordinatesArray, bigCentre, bigRadius) {
   var canvas = document.getElementById("viewer");
   var ctx = canvas.getContext("2d");
   console.log();
-  let dist = [12, 0, 12, 45, 90, 150, 210, 255];
+  let dist = [80, 50,30, 0, 30, 50, 80, 150];
 
   let r = 0;
-  let sign = ["-", "+", "-", "+", "+", "+", "+", "+"];
+  let sign = ["-", "-", "-", "+", "+", "+", "+", "+"];
 
   setInterval(() => {
     for (var k = 0; k < 8; k++) {
@@ -119,7 +119,7 @@ function drawPoints(coordinatesArray, bigCentre, bigRadius) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawPointsLogic(ctx, coordinatesArray, dist);
     drawBigCircle(bigCentre, bigRadius);
-    drawLines(bigCentre, bigRadius);
+    //drawLines(bigCentre, bigRadius);
   }, 100);
 
   // ctx.clearRect(0, 0, canvas.width, canvas.height);
